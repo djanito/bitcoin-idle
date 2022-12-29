@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>ComputeR | Login</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" media="screen"/>
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+    
+  <style>
+    html, body{
+      font-family: 'Press Start 2P', cursive;
+      font-weight: normal;
+      font-smooth: auto;
+      background-color: #f7f1e3;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .row {
+      width:  30%;
+    }
+
+    h3{
+      text-align: center;
+      margin: 0;
+    }
+
+    button{
+      margin-top: 30px !important;
+    }
+
+    label{
+      padding-top: 15px;
+    }
+
+    .nes-checkbox{
+      margin-left: 10px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+
+    @media(max-width: 900px){
+      .column{
+        width: 100%;
+      }
+    }
+
+    /* Login */
+    .register-text {
+      color: #212529;
+    }
+
+  </style>
+
+<script>
+
+  function validateForm() {
+    var username_field = document.getElementById("logemail");
+    var password_field = document.getElementById("logpass");
+
+    if (username_field.value == "") {
+      username_field.classList.add("is-error");
+    } else {
+      username_field.classList.remove("is-error");
+      username_field.classList.add("is-success");
+    }
+
+    if (password_field.value == "") {
+      password_field.classList.add("is-error");
+    } else {
+      password_field.classList.remove("is-error");
+      password_field.classList.add("is-success");
+    }
+
+    return !((password_field.value == "") || (username_field.value == ""));
+}
+
+</script>
+
+
+
+</head>
+
+<body>
+
+  <div class="container-fluid d-flex justify-content-center align-items-center" style="height:100vh;">
+
+    <!-- Inner row, half the width and height, centered, blue border -->
+    <div class="row d-flex align-items-center">
+
+      <h3>ComputeR</h3>
+      <br>
+      <br>
+      <form action="/login" method="post" onsubmit="return validateForm()">
+        <div class="nes-field">
+          <label for="logemail">Username</label>
+          <input type="text" class="nes-input" name="logemail" id="logemail" placeholder="Enter Username*">
+        </div>
+        <div class="nes-field">
+          <label for="logpass">Password</label>
+          <input type="password" id="logpass" name="logpass" class="nes-input" placeholder="Enter Password*">
+        </div>
+        <label>
+          <input type="checkbox" class="nes-checkbox" />
+          <span>Remember Me</span>
+        </label>
+        <br><br>
+        <input type="submit" value="Submit" class="nes-btn is-primary">
+        <br>
+        <br>
+        <a href="/register" class="register-text text-right">Don't have an account? Register</a>
+      </form>
+
+      <% if (credentialsError) { %>
+        <div class="nes-container is-rounded mt-4">
+          <p class="nes-text is-error">User credentials are incorrect.</p>
+        </div>
+      <% } %>
+
+    </div>
+  </div>
+
+</body>
+
+</html>

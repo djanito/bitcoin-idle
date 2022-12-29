@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>University Game | Game</title>
+	<meta content="" name="description">
+   <meta content="" name="keywords">
+
+	<!-- Favicons -->
+	<link href="assets/img/favicon.svg" rel="icon">
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+	<link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="assets/css/main.css" media="screen"/>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+
+	<div id="nescss">
+
+		<header :class="{ sticky: scrollPos > 50 }">
+			<nav class="navbar navbar-expand-lg">
+			  <div class="container-fluid mx-4">
+			    <a class="navbar-brand">ComputeR</a>
+			    <button
+			      class="navbar-toggler"
+			      type="button"
+			      data-mdb-toggle="collapse"
+			      data-mdb-target="#navbarText"
+			      aria-controls="navbarText"
+			      aria-expanded="false"
+			      aria-label="Toggle navigation">
+			      <i class="fas fa-bars"></i>
+			    </button>
+			    <div class="collapse navbar-collapse" id="navbarText">
+			      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+			        	<li class="nav-item">
+			         	<a class="nav-link" href="#">Save</a>
+			        	</li>
+			        	<li class="nav-item">
+			          	<a class="nav-link" href="#">Options</a>
+			        	</li>
+			        	<li class="nav-item">
+			          	<a class="nav-link" href="#">Restart</a>
+			        	</li>
+			        	<li class="nav-item">
+			          	<a class="nav-link" href="#" onclick="document.getElementById('dialog-rounded').showModal();">Delete</a>
+			          	<dialog class="nes-dialog is-rounded" id="dialog-rounded">
+						    <form method="dialog">
+						      <p class="title">Delete</p>
+						      <p>Alert: all your date will be delete.</p>
+						      <menu class="dialog-menu">
+						        <button class="nes-btn">Cancel</button>
+						        <button class="nes-btn is-primary" onclick="deleteLocalStorage()">Confirm</button>
+						      </menu>
+						    </form>
+						  </dialog>
+			        	</li>
+			        	<li class="nav-item">
+			        		<% if (req.loggedin) { %>
+			        			<a class="nav-link" href="/logout">Log out</a>
+			         	<% } else {%>
+			         		<a class="nav-link" href="/login">Log in</a>
+			         	<% }%>
+			        	</li>
+			      </ul>
+
+				   <div>
+				   	<i class="nes-icon twitter"></i>
+				   	<i class="nes-icon instagram"></i>
+				   	<span class="navbar-text">V1.0</span>
+					</div>
+
+			    </div>
+			  </div>
+			</nav>
+		</header>
+
+		<div class="game">
+      	<main class="main-content">
+			      <div class= "row">
+
+			      	<!-- STATS -->
+			        	<div class="col-sm-4 nes-container with-title">
+							<p class="title">Stats</p>
+							<div class="lists">
+							  <ul class="nes-list is-disc">
+							    <li>Hashrate: 50 Ghr</li>
+							    <li>Number of computer: 10</li>
+							    <li>Number of component: 500</li>
+							  </ul>
+							</div>
+						</div>
+						<!-- FIN STATS -->
+
+						<!-- CLICKER -->
+						<div class="col nes-container with-title mx-2" id="clicker">
+							<p class="title">Computer</p>
+
+							<div class="nes-container with-title mb-4" style="background-color: #fffff4;">
+								<p class="title">Total BTC</p>
+								<h4 class="nes-text text-center text-warning" id="total">{{ bitcoin }} BTC</h4>
+								<h6 class="nes-text text-center is-disabled">per second : 220</h6>
+							</div>
+
+							<div class="nes-container with-title text-center"  style="background-color: #fffff4;">
+								<p class="title">LvL 3</p>
+								<img class="round text-center mb-4" src="/assets/img/computer.png" width="150" @click='increaseBtc'></img>
+							</div>
+						</div>
+						<!-- FIN CLICKER -->
+
+						<!-- UPGRADES -->
+						<div class="col-sm-4 nes-container with-title">
+						   <p class="title">Upgrades</p>
+
+						   <div class="container mb-2">
+							   <button type="button" class="nes-btn small is-primary">X1</button>
+								<button type="button" class="nes-btn small is-success is-disabled">X10</button>
+								<button type="button" class="nes-btn small is-error is-disabled">X100</button>
+							</div>
+
+							<div class="bs-component">
+				            <div class="list-group">
+				            	<% components.forEach(function(c, i){ %>
+					              	<div class="nes-container mt-3 hoverDiv">
+					               	<div class="card-body" data-toggle="popover" data-content="La RAM c'est la vie, dans 30 ans il y en aura plus.">
+					               		<div class="container">
+												   <div class="row row-eq-height align-items-center no-gutters no-padding">
+												   	<div class="col col-sm-auto float-start g-0" width="45">
+												   		<img class="img-fluid" src="/assets/img/<%= c.id %>.png" width="45">
+												  		</div>
+												  		<div class="col px-4">
+													      <div class="row">
+													        	<div class="col text-start"><h5 class="card-title nes-text"><%= c.name %></h5></div>
+													      </div>
+													      <div class="row">
+													        	<div class="col"><span class="nes-text is-success"><%= c.price %> BTC</span></div>
+													      </div>
+												  		</div>
+													   <div class="col col-sm-auto g-0">
+													   	<span class="h2 card-title nes-text is-disabled float-end">12</span>
+													   </div>
+												  	</div>
+												</div>
+					               	</div>
+					              	</div>
+									<% }); %>				              	
+				            </div>
+				         </div>
+
+			         </div>
+			         <!-- FIN UPGRADES -->
+
+			      </div>
+			</main>
+		</div>
+
+ 	</div>                 
+
+	<footer class="mt-auto">
+      <p>
+      	<span>&copy;2022</span>
+         <a href="#" target="_blank" rel="noopener">DYMTV Corp</a>
+         <span>- TW2</span>
+      </p>
+
+		<script>
+    		$("[data-toggle=popover]").popover({ trigger: "hover", 
+    														 placement : 'left', 
+    														 template :  "<div class='popover-content nes-balloon from-right'><p>La RAM c'est la vie, dans 30 ans il y en aura plus.</p></div>"});
+     
+    		function deleteLocalStorage() {
+    			localStorage.clear();
+    			window.location.reload(true);
+    		}
+
+      </script>
+
+      <script src="assets/js/app.js"></script>
+
+   </footer>
+
+</body>
+</html>
