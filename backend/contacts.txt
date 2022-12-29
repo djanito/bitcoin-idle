@@ -1,0 +1,4 @@
+name=Carlo;email=carlo@tentacle.com;subject=I am not happy;message=Bob, stop being yourself!
+name=Carlo;email=carlo@grumpy.com;subject=I don't like Bob;message=I hate Bob!!!name=Patrick;email=patrick@patrick.com;subject=This is patrick;message=THIS IS PATRICK!
+name=Patrick;email=patrick@patrick.com;subject=This is patrick;message=THIS IS PATRICK!
+name=Krabs;email=Krabs@money.com;subject=I love money!;message=Give me money!
