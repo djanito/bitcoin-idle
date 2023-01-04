@@ -10,6 +10,8 @@ function b64d(str) {
   }).join(''));
 }
 
+const twoDecimal = num => Number((num).toPrecision(3));
+
 var defaultGameData = {
            "bitcoin": 0,
            "upgrades": {
@@ -37,7 +39,9 @@ const app = new Vue({
   el: '#clicker',
   data: {
     bitcoin: 0,
-    upgrades: {"0":0, "1":0, "2":0, "3":0}
+    hashrate: 0,
+    upgrades: [0, 0, 0, 0],
+    components: [],
   },
   mounted() {
     if (localStorage.BitcoinClickerGame) {
@@ -47,19 +51,56 @@ const app = new Vue({
     } else {
       localStorage.setItem("BitcoinClickerGame", JSON.stringify(defaultGameData));
     }
+
+    window.setInterval(() => { 
+      if (this.currentHashRate > 0) {
+        this.increaseBtc(this.currentHashRate);
+      }
+    }, 1000);
   },
 
   methods: {
-    increaseBtc : function() {
-      this.bitcoin += 1;
-      gameData.bitcoin = this.bitcoin;
-      localStorage.setItem("BitcoinClickerGame", JSON.stringify(gameData));
+    increaseBtc : function(amount) {
+      this.bitcoin = twoDecimal(this.bitcoin + amount);
+      //gameData.bitcoin = this.bitcoin;
+      //localStorage.setItem("BitcoinClickerGame", JSON.stringify(gameData));
     },
 
-    increaseAmelioration : function(ind) {
-      this.upgrades[ind] += 1;
-      gameData.bitcoin = this.bitcoin;
-      localStorage.setItem("BitcoinClickerGame", JSON.stringify(gameData));
+    increaseAmelioration : function(id) {
+      component = this.components[id];
+
+      console.log(component);
+
+      if (this.bitcoin >= component.price) {
+        this.bitcoin = twoDecimal(this.bitcoin -  component.price);
+        component.price = twoDecimal(component.price * 1.15);
+
+        let backupList = this.upgrades;
+        backupList[id]++;
+        this.upgrades = []
+        this.upgrades = backupList;
+
+        this.components[id] = component;
+      } else {
+        console.log("not enought money");
+      }
+
     },
-  }
+
+    enought(id) {
+      return this.bitcoin >= this.components[id].price ? 'nes-text is-success' : 'nes-text is-error'
+    }
+  },
+
+  computed: {
+    currentHashRate() {
+      hashrate = 0;
+      this.components.forEach((comp) => {
+        hashrate += comp.hashrate * this.upgrades[comp.id];
+      });
+
+      return twoDecimal(hashrate);
+    }
+  },
+
 });
