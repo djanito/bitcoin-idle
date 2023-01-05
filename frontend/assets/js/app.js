@@ -25,7 +25,6 @@ const app = new Vue({
   el: '#clicker',
   data: {
     bitcoin: 0,
-    hashrate: 0,
     upgrades: [0, 0, 0, 0],
     components: [],
     multiplier: 1,
@@ -40,7 +39,6 @@ const app = new Vue({
       this.bitcoin = parseInt(gameData.bitcoin);
       this.components = gameData.components;
       this.upgrades = gameData.upgrades;
-      this.hashrate = this.currentHashRate;
       this.totalBitcoin = gameData.totalBitcoin;
       this.totalClicks = gameData.totalClicks;
       this.bitcoinSpent = gameData.bitcoinSpent;
