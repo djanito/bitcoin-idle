@@ -95,9 +95,10 @@
 							<p class="title">Stats</p>
 							<div class="lists">
 							  <ul class="nes-list is-disc">
-							    <li>Hashrate: 50 Ghr</li>
-							    <li>Number of computer: 10</li>
-							    <li>Number of component: 500</li>
+							    <li> Total upgrades : {{ upgradeStat }}</li>
+								<li> Total BTC : {{ totalBitcoin | truncate(2) }}</li>
+								<li> BTC spent : {{ bitcoinSpent | truncate(2) }}</li>
+								<li> BTC clicked : {{ totalClicks }}</li>
 							  </ul>
 							</div>
 						</div>
@@ -115,7 +116,7 @@
 
 							<div class="nes-container with-title text-center"  style="background-color: #fffff4;">
 								<p class="title">LvL 3</p>
-								<img class="round text-center mb-4" src="/assets/img/computer.png" width="150" @click='increaseBtc(1)'></img>
+								<img class="round text-center mb-4" src="/assets/img/computer.png" width="150" @click='increaseClicks()'></img>
 							</div>
 						</div>
 						<!-- FIN CLICKER -->
@@ -183,6 +184,7 @@
 		<script>
     		//$("[data-toggle=popover]").popover({ trigger: "hover", placement : 'left', template :  "<div class='popover-content nes-balloon from-right'><p>La RAM c'est la vie, dans 30 ans il y en aura plus.</p></div>"});
      		
+     		console.log(req.loggedin);
     		function deleteLocalStorage() {
     			localStorage.clear();
     			window.location.reload(true);

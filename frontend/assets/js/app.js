@@ -13,7 +13,10 @@ function b64d(str) {
 var defaultGameData = {
            "bitcoin": 0,
            "upgrades": [0, 0, 0, 0],
-           "components": []
+           "components": [],
+           "totalBitcoin": 0,
+           "totalClicks": 0,
+           "bitcoinSpent": 0,
 };
 
 var gameData = defaultGameData;
@@ -26,6 +29,9 @@ const app = new Vue({
     upgrades: [0, 0, 0, 0],
     components: [],
     multiplier: 1,
+    totalBitcoin: 0,
+    totalClicks: 0,
+    bitcoinSpent: 0,
   },
   mounted() {
     if (localStorage.BitcoinClickerGame) {
@@ -35,6 +41,9 @@ const app = new Vue({
       this.components = gameData.components;
       this.upgrades = gameData.upgrades;
       this.hashrate = this.currentHashRate;
+      this.totalBitcoin = gameData.totalBitcoin;
+      this.totalClicks = gameData.totalClicks;
+      this.bitcoinSpent = gameData.bitcoinSpent;
     }
 
     window.setInterval(() => { 
@@ -52,12 +61,20 @@ const app = new Vue({
   methods: {
     increaseBtc : function(amount) {
       this.bitcoin += amount;
+      this.totalBitcoin += amount;
+    },
+
+    increaseClicks : function() {
+      this.bitcoin +=  1;
+      this.totalBitcoin += 1;
+      this.totalClicks += 1;
     },
 
     increaseAmelioration : function(id) {
       component = this.components[id];
 
       if (this.bitcoin >= this.getPrice(component.price)) {
+        this.bitcoinSpent += this.getPrice(component.price);
         this.bitcoin -= this.getPrice(component.price);
         component.price = this.getPrice(component.price * 1.15);
 
@@ -125,6 +142,9 @@ const app = new Vue({
       gameData.bitcoin = this.bitcoin;
       gameData.components = this.components;
       gameData.upgrades = this.upgrades;
+      gameData.totalBitcoin = this.totalBitcoin;
+      gameData.totalClicks = this.totalClicks;
+      gameData.bitcoinSpent = this.bitcoinSpent;
       localStorage.setItem("BitcoinClickerGame", JSON.stringify(gameData));
     }
 
@@ -139,6 +159,17 @@ const app = new Vue({
       });
 
       return hashrate;
+    },
+
+    upgradeStat() {
+      sum = 0;
+      this.upgrades.forEach((upgrade) => {
+        sum += upgrade                                            
+      });
+
+      //sum = arr.reduce((a, b) => a + b, 0);
+
+      return sum;
     }
   },
 

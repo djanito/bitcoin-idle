@@ -30,6 +30,7 @@ router.post('/', function (req, res, next) {
                             req.session.loggedin = true;
                             req.session.login = result['login'];
                             req.session.bitcoin = result['bitcoin'];
+                            res.locals.req = req;
                             res.redirect("/");
                         } else {
                            res.render('login.ejs', {credentialsError: true}); 
