@@ -15,6 +15,7 @@ router.use('/game.ejs', function (req, res) {
 router.use('/', function (req, res) {
     res.locals.req = req;
     db.getComponents().then(data => {
+        console.log(data)
         res.render('game', {components: data});
     });
 });

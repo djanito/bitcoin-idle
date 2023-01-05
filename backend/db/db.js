@@ -17,12 +17,10 @@ module.exports = {
             var sql = "SELECT * FROM components;";
             db.all(sql, function(err, rows) {
                 if(err) {
-                    console.log("Impossible to get the comonents %s", err);
                     reject(null);
                 }
                 else
                 {
-                    console.log(`Components retrieved`);
                     resolve(rows);
                 }
             });

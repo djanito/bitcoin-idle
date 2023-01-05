@@ -10,27 +10,10 @@ function b64d(str) {
   }).join(''));
 }
 
-const twoDecimal = num => Number((num).toPrecision(3));
-
 var defaultGameData = {
            "bitcoin": 0,
-           "upgrades": {
-              "mouse": {
-                "owned" : 0,
-                "bought" : 0,
-                "cookieProduced" : 0,
-              },
-              "mousepad": {
-                "owned" : 0,
-                "bought" : 0,
-                "cookieProduced" : 0,
-              },
-              "headset": {
-                "owned" : 0,
-                "bought" : 0,
-                "cookieProduced" : 0,
-              }
-           }
+           "upgrades": [0, 0, 0, 0],
+           "components": []
 };
 
 var gameData = defaultGameData;
@@ -42,14 +25,16 @@ const app = new Vue({
     hashrate: 0,
     upgrades: [0, 0, 0, 0],
     components: [],
+    multiplier: 1,
   },
   mounted() {
     if (localStorage.BitcoinClickerGame) {
       var storage = localStorage.getItem('BitcoinClickerGame');
       gameData = JSON.parse(storage);
       this.bitcoin = parseInt(gameData.bitcoin);
-    } else {
-      localStorage.setItem("BitcoinClickerGame", JSON.stringify(defaultGameData));
+      this.components = gameData.components;
+      this.upgrades = gameData.upgrades;
+      this.hashrate = this.currentHashRate;
     }
 
     window.setInterval(() => { 
@@ -57,26 +42,27 @@ const app = new Vue({
         this.increaseBtc(this.currentHashRate);
       }
     }, 1000);
+
+    window.setInterval(() => { 
+      this.saveLocalStorage();
+    }, 10000);
+
   },
 
   methods: {
     increaseBtc : function(amount) {
-      this.bitcoin = twoDecimal(this.bitcoin + amount);
-      //gameData.bitcoin = this.bitcoin;
-      //localStorage.setItem("BitcoinClickerGame", JSON.stringify(gameData));
+      this.bitcoin += amount;
     },
 
     increaseAmelioration : function(id) {
       component = this.components[id];
 
-      console.log(component);
-
-      if (this.bitcoin >= component.price) {
-        this.bitcoin = twoDecimal(this.bitcoin -  component.price);
-        component.price = twoDecimal(component.price * 1.15);
+      if (this.bitcoin >= this.getPrice(component.price)) {
+        this.bitcoin -= this.getPrice(component.price);
+        component.price = this.getPrice(component.price * 1.15);
 
         let backupList = this.upgrades;
-        backupList[id]++;
+        backupList[id] += this.multiplier;
         this.upgrades = []
         this.upgrades = backupList;
 
@@ -87,9 +73,62 @@ const app = new Vue({
 
     },
 
+    setComponents(components) {
+      if (localStorage.BitcoinClickerGame) {
+        console.log("test");
+        var storage = localStorage.getItem('BitcoinClickerGame');
+        gameData = JSON.parse(storage);
+        this.components = gameData.components;
+      } else {
+        this.components = components;
+        gameData.components = this.components;
+        localStorage.setItem("BitcoinClickerGame", JSON.stringify(defaultGameData));
+      }
+
+      console.log(this.components);
+    },
+
+    setMultiplier(mul) {
+      this.multiplier = Number(mul);
+    },
+
     enought(id) {
-      return this.bitcoin >= this.components[id].price ? 'nes-text is-success' : 'nes-text is-error'
+      return this.bitcoin >= this.getPrice(this.components[id].price) ? 'nes-text is-success' : 'nes-text is-error';
+    },
+
+    getPrice(price) {
+      if (this.multiplier == 1) {
+        return price;
+      } else if (this.multiplier == 10) {
+        return price * 20.303718238;
+      } else if (this.multiplier == 100) {
+        return price * 7828749.671335256;
+      }
+    },
+
+    
+    display(id) {
+      if (id == 0) {
+        return 'nes-container mt-3 hoverDiv is-disabled';
+      } 
+      else {
+        if (this.upgrades[id-1] > 0) {
+          return 'nes-container mt-3 hoverDiv is-disabled';
+        }
+        else {
+          return 'invisible';
+        }
+      }
+    },
+
+    saveLocalStorage() {
+      gameData.bitcoin = this.bitcoin;
+      gameData.components = this.components;
+      gameData.upgrades = this.upgrades;
+      localStorage.setItem("BitcoinClickerGame", JSON.stringify(gameData));
     }
+
+
   },
 
   computed: {
@@ -99,8 +138,17 @@ const app = new Vue({
         hashrate += comp.hashrate * this.upgrades[comp.id];
       });
 
-      return twoDecimal(hashrate);
+      return hashrate;
     }
   },
+
+  filters: {
+    round: function (number) {
+      return Math.ceil(Number(number));
+    },
+    truncate: function (number, decimals) {
+      return Number((number).toPrecision(decimals));
+    },
+  }
 
 });

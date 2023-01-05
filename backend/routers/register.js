@@ -3,13 +3,9 @@ const router = express.Router();
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 
-// connecting an existing database (handling errors)
-const db = new sqlite3.Database('./db/bitcoin_clicker.db', (err) => {
-    if (err) {
-        console.error(err.message);
-    }
-    console.log('Connected to the database!');
-});
+const db = require('../db/db');
+
+db.connectDB();
 
 
 // register gestion
