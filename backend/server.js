@@ -30,10 +30,12 @@ app.use(express.static(path.join(__dirname, "node_modules/bootstrap/dist/")));
 // Routers
 const game = require('./routers/game');
 const login = require('./routers/login');
+const logout = require('./routers/logout');
 const register = require('./routers/register');
 
 // Middleware
 app.use('/login', login);
+app.use('/logout', logout);
 app.use('/register', register);
 app.use('/', game);
 

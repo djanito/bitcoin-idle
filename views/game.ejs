@@ -6,7 +6,7 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>University Game | Game</title>
+	<title>ComputeR | Game</title>
 	<meta content="" name="description">
    <meta content="" name="keywords">
 
@@ -51,14 +51,24 @@
 			          	<a class="nav-link" href="#">Options</a>
 			        	</li>
 			        	<li class="nav-item">
-			          	<a class="nav-link" href="#">Restart</a>
+			          	<a class="nav-link" href="#" onclick="document.getElementById('dialog-restart').showModal();">Restart</a>
+			          	<dialog class="nes-dialog is-rounded" id="dialog-restart">
+						    <form method="dialog">
+						      <p class="title">Restart</p>
+						      <p>Alert: all your date will be delete but you will get a bonus.</p>
+						      <menu class="dialog-menu">
+						        <button class="nes-btn">Cancel</button>
+						        <button class="nes-btn is-primary" onclick="restartLocalStorage()">Confirm</button>
+						      </menu>
+						    </form>
+						  </dialog>
 			        	</li>
 			        	<li class="nav-item">
-			          	<a class="nav-link" href="#" onclick="document.getElementById('dialog-rounded').showModal();">Delete</a>
-			          	<dialog class="nes-dialog is-rounded" id="dialog-rounded">
+			          	<a class="nav-link" href="#" onclick="document.getElementById('dialog-delete').showModal();">Delete</a>
+			          	<dialog class="nes-dialog is-rounded" id="dialog-delete">
 						    <form method="dialog">
 						      <p class="title">Delete</p>
-						      <p>Alert: all your date will be delete.</p>
+						      <p>Alert: all your data will be delete.</p>
 						      <menu class="dialog-menu">
 						        <button class="nes-btn">Cancel</button>
 						        <button class="nes-btn is-primary" onclick="deleteLocalStorage()">Confirm</button>
@@ -67,7 +77,7 @@
 						  </dialog>
 			        	</li>
 			        	<li class="nav-item">
-			        		<% if (req.loggedin) { %>
+			        		<% if (data.loggedin) { %>
 			        			<a class="nav-link" href="/logout">Log out</a>
 			         	<% } else {%>
 			         		<a class="nav-link" href="/login">Log in</a>
@@ -96,7 +106,7 @@
 							<div class="lists">
 							  <ul class="nes-list is-disc">
 							    <li> Total upgrades : {{ upgradeStat }}</li>
-								<li> Total BTC : {{ totalBitcoin | truncate(2) }}</li>
+								<li> Total BTC : {{ totalBitcoin | round }}</li>
 								<li> BTC spent : {{ bitcoinSpent | truncate(2) }}</li>
 								<li> BTC clicked : {{ totalClicks }}</li>
 							  </ul>
@@ -133,7 +143,7 @@
 
 							<div class="bs-component">
 				            <div class="list-group">
-				            	<% components.forEach(function(c, i){ %>
+				            	<% data.components.forEach(function(c, i){ %>
 					              	<div :class="display(<%= c.id %>)" id="<%= c.name %>" @click="increaseAmelioration(<%= c.id %>)">
 					               	<div class="card-body" data-toggle="popover" data-content="La RAM c'est la vie, dans 30 ans il y en aura plus.">
 					               		<div class="container">
@@ -178,13 +188,12 @@
 
       <script src="assets/js/app.js"></script>
       <script type="text/javascript">
-      	app.setComponents(<%- JSON.stringify(components) %>);
+      	app.setComponents(<%- JSON.stringify(data.components) %>);
       </script>
 
 		<script>
     		//$("[data-toggle=popover]").popover({ trigger: "hover", placement : 'left', template :  "<div class='popover-content nes-balloon from-right'><p>La RAM c'est la vie, dans 30 ans il y en aura plus.</p></div>"});
      		
-     		console.log(req.loggedin);
     		function deleteLocalStorage() {
     			localStorage.clear();
     			window.location.reload(true);

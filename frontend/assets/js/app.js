@@ -90,7 +90,6 @@ const app = new Vue({
 
     setComponents(components) {
       if (localStorage.BitcoinClickerGame) {
-        console.log("test");
         var storage = localStorage.getItem('BitcoinClickerGame');
         gameData = JSON.parse(storage);
         this.components = gameData.components;
@@ -99,8 +98,6 @@ const app = new Vue({
         gameData.components = this.components;
         localStorage.setItem("BitcoinClickerGame", JSON.stringify(defaultGameData));
       }
-
-      console.log(this.components);
     },
 
     setMultiplier(mul) {
@@ -165,8 +162,6 @@ const app = new Vue({
         sum += upgrade                                            
       });
 
-      //sum = arr.reduce((a, b) => a + b, 0);
-
       return sum;
     }
   },
@@ -176,7 +171,7 @@ const app = new Vue({
       return Math.ceil(Number(number));
     },
     truncate: function (number, decimals) {
-      return Number((number).toPrecision(decimals));
+      return parseFloat(number).toPrecision(decimals);
     },
   }
 

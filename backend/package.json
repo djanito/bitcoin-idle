@@ -1,6 +1,6 @@
 {
-  "name": "krustykrabv2",
-  "version": "1.0.0",
+  "name": "ComputeR",
+  "version": "1.2.0",
   "description": "",
   "main": "server.js",
   "scripts": {
