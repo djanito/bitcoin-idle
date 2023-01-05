@@ -17,6 +17,7 @@ var defaultGameData = {
            "totalBitcoin": 0,
            "totalClicks": 0,
            "bitcoinSpent": 0,
+           "restartFactor": 1
 };
 
 var gameData = defaultGameData;
@@ -31,6 +32,7 @@ const app = new Vue({
     totalBitcoin: 0,
     totalClicks: 0,
     bitcoinSpent: 0,
+    restartFactor: 1,
   },
   mounted() {
     if (localStorage.BitcoinClickerGame) {
@@ -42,6 +44,7 @@ const app = new Vue({
       this.totalBitcoin = gameData.totalBitcoin;
       this.totalClicks = gameData.totalClicks;
       this.bitcoinSpent = gameData.bitcoinSpent;
+      this.restartFactor = gameData.restartFactor;
     }
 
     window.setInterval(() => { 
@@ -63,8 +66,8 @@ const app = new Vue({
     },
 
     increaseClicks : function() {
-      this.bitcoin +=  1;
-      this.totalBitcoin += 1;
+      this.bitcoin +=  1 * this.restartFactor;
+      this.totalBitcoin += 1 * this.restartFactor;
       this.totalClicks += 1;
     },
 
@@ -140,7 +143,15 @@ const app = new Vue({
       gameData.totalBitcoin = this.totalBitcoin;
       gameData.totalClicks = this.totalClicks;
       gameData.bitcoinSpent = this.bitcoinSpent;
+      gameData.restartFactor = this.restartFactor;
       localStorage.setItem("BitcoinClickerGame", JSON.stringify(gameData));
+    },
+
+    increaseLevel() {
+      if (this.bitcoin >= this.restartFactor ** 1.15 * 1000) {
+        this.restartFactor += 1;
+        this.bitcoin = 0;
+      }
     }
 
 

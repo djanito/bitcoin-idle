@@ -125,7 +125,7 @@
 							</div>
 
 							<div class="nes-container with-title text-center"  style="background-color: #fffff4;">
-								<p class="title">LvL 3</p>
+								<p class="title">LvL {{ restartFactor }}</p>
 								<img class="round text-center mb-4" src="/assets/img/computer.png" width="150" @click='increaseClicks()'></img>
 							</div>
 						</div>
@@ -197,6 +197,10 @@
     		function deleteLocalStorage() {
     			localStorage.clear();
     			window.location.reload(true);
+    		}
+
+    		function restartLocalStorage() {
+    			app.increaseLevel();
     		}
 
     		let allBtns = document.querySelectorAll("button");
