@@ -36,7 +36,7 @@ const app = new Vue({
   },
   mounted() {
     if (localStorage.BitcoinClickerGame) {
-      var storage = localStorage.getItem('BitcoinClickerGame');
+      var storage = b64d(localStorage.getItem('BitcoinClickerGame'));
       gameData = JSON.parse(storage);
       this.bitcoin = parseInt(gameData.bitcoin);
       this.components = gameData.components;
@@ -55,7 +55,7 @@ const app = new Vue({
 
     window.setInterval(() => { 
       this.saveLocalStorage();
-    }, 10000);
+    }, 10000); // save toute les 10s
 
   },
 
@@ -93,7 +93,7 @@ const app = new Vue({
 
     setComponents(components) {
       if (localStorage.BitcoinClickerGame) {
-        var storage = localStorage.getItem('BitcoinClickerGame');
+        var storage = b64d(localStorage.getItem('BitcoinClickerGame'));
         gameData = JSON.parse(storage);
         this.components = gameData.components;
       } else {
@@ -144,7 +144,7 @@ const app = new Vue({
       gameData.totalClicks = this.totalClicks;
       gameData.bitcoinSpent = this.bitcoinSpent;
       gameData.restartFactor = this.restartFactor;
-      localStorage.setItem("BitcoinClickerGame", JSON.stringify(gameData));
+      localStorage.setItem("BitcoinClickerGame", b64e(JSON.stringify(gameData)));
     },
 
     increaseLevel() {
@@ -170,7 +170,7 @@ const app = new Vue({
     upgradeStat() {
       sum = 0;
       this.upgrades.forEach((upgrade) => {
-        sum += upgrade                                            
+        sum += upgrade;                                            
       });
 
       return sum;
